@@ -43,8 +43,8 @@ git clone https://github.com/Floppaponel/HammerLauncher.git
 - The application requires app.ico and arrow.png to be present in the executable's directory for the UI to render correctly.
 - The logic.cpp file relies on winhttp.lib and windowscodecs.lib (both are included in the standard Windows SDK).
 ## Usage
-1. Download the latest .zip archive from the Releases page.
-2. Extract the archive to any folder on your PC.
-3. Run HammerLauncher.exe.
+* **1. Download the latest .zip archive from the Releases page.**
+* **2. Extract the archive to any folder on your PC.**
+* **3. Run HammerLauncher.exe.**
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
