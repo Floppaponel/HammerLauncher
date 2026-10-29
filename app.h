@@ -1,3 +1,9 @@
+/*
+ * Hammer Launcher
+ * Copyright (c) 2026 Floppaponel
+ * Licensed under the MIT License.
+ */
+
 #pragma once
 #include <wx/wx.h>
 #include <wx/scrolwin.h>
