@@ -1,3 +1,9 @@
+/*
+ * Hammer Launcher
+ * Copyright (c) 2026 Floppaponel
+ * Licensed under the MIT License.
+ */
+
 #include "app.h"
 #include <windows.h>
 #include <winhttp.h>
