@@ -1,9 +1,3 @@
-/*
- * Hammer Launcher
- * Copyright (c) 2026 Floppaponel
- * Licensed under the MIT License.
- */
-
 #include "app.h"
 #include <windows.h>
 #include <shellapi.h>
@@ -224,8 +218,8 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Hammer Launcher", wxDefaultPosi
 
     profileSizer->AddStretchSpacer();
 
-    /* btnWebsite = new wxButton(profilePanel, wxID_ANY, "Website", wxDefaultPosition, wxSize(80, 30)); */
-    btnGithub = new wxButton(profilePanel, wxID_ANY, "GitHub", wxDefaultPosition, wxSize(80, 30));
+    btnDiscord = new wxButton(profilePanel, wxID_ANY, "Discord", wxDefaultPosition, wxSize(80, 30));
+    btnOpenSource = new wxButton(profilePanel, wxID_ANY, "Source Code", wxDefaultPosition, wxSize(100, 30));
 
     auto styleLinkButton = [](wxButton* btn) {
         btn->SetBackgroundColour(wxColour(25, 25, 25));
@@ -235,25 +229,27 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Hammer Launcher", wxDefaultPosi
         btn->Bind(wxEVT_LEAVE_WINDOW, [btn](wxMouseEvent& e) { btn->SetForegroundColour(wxColour(150, 150, 150)); btn->Refresh(); e.Skip(); });
         };
 
-    /* styleLinkButton(btnWebsite); */
-    styleLinkButton(btnGithub);
+    styleLinkButton(btnDiscord);
+    styleLinkButton(btnOpenSource);
 
-    /*  btnWebsite->Bind(wxEVT_BUTTON, [](wxCommandEvent&) {
-    *    ShellExecuteW(nullptr, L"open", L"https://your-website.com", nullptr, nullptr, SW_SHOWNORMAL);
-       }); */
-    btnGithub->Bind(wxEVT_BUTTON, [](wxCommandEvent&) {
+    btnDiscord->Bind(wxEVT_BUTTON, [](wxCommandEvent&) {
+        ShellExecuteW(nullptr, L"open", L"https://discord.gg/your-invite", nullptr, nullptr, SW_SHOWNORMAL);
+        });
+    btnOpenSource->Bind(wxEVT_BUTTON, [](wxCommandEvent&) {
         ShellExecuteW(nullptr, L"open", L"https://github.com/Floppaponel/HammerLauncher", nullptr, nullptr, SW_SHOWNORMAL);
         });
 
-    /* profileSizer->Add(btnWebsite, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10); */
-    profileSizer->Add(btnGithub, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    profileSizer->Add(btnDiscord, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 10);
+    profileSizer->Add(btnOpenSource, 0, wxALIGN_CENTER_VERTICAL | wxRIGHT, 15);
 
     profilePanel->SetSizer(profileSizer);
 
-    scrollWin = new wxScrolledWindow(mainPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL);
+    scrollWin = new wxScrolledWindow(mainPage, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxVSCROLL | wxALWAYS_SHOW_SB);
     scrollWin->SetBackgroundColour(wxColour(15, 15, 15));
     scrollWin->SetScrollRate(0, 20);
-    scrollWin->SetVirtualSize(2000, 2000);
+
+    gridSizer = new wxGridSizer(0, 3, 10, 10);
+    scrollWin->SetSizer(gridSizer);
 
     mainPageSizer->Add(profilePanel, 0, wxEXPAND | wxALL, 10);
     mainPageSizer->Add(scrollWin, 1, wxEXPAND | wxLEFT | wxRIGHT | wxBOTTOM, 10);
@@ -338,7 +334,7 @@ MyFrame::MyFrame() : wxFrame(nullptr, wxID_ANY, "Hammer Launcher", wxDefaultPosi
         });
 
     gamePage->Bind(wxEVT_SIZE, [this, bannerPanel](wxSizeEvent& event) {
-        int newWidth = gamePage->GetSize().x;
+        int newWidth = gamePage->GetSize().GetWidth();
         int newHeight = 350;
         if (bigArtBmp->IsShown()) {
             wxString bannerPath = "images_banner/" + currentGameData.appId + ".jpg";
@@ -382,10 +378,7 @@ void MyFrame::ScanGames() {
     LoadSteamGames(this, games, steamRootPath);
     LoadProfile();
 
-    wxBoxSizer* mainVertSizer = new wxBoxSizer(wxVERTICAL);
-    wxWrapSizer* wrapSizer = new wxWrapSizer(wxHORIZONTAL, wxREMOVE_LEADING_SPACES);
-    mainVertSizer->Add(wrapSizer, 1, wxEXPAND | wxALL, 0);
-    scrollWin->SetSizer(mainVertSizer);
+    gridSizer->Clear(true);
 
     for (const auto& data : games) {
         wxPanel* tilePanel = new wxPanel(scrollWin, wxID_ANY, wxDefaultPosition, wxSize(320, 200));
@@ -432,7 +425,7 @@ void MyFrame::ScanGames() {
         bindClick(iconBmp);
         bindClick(nameText);
 
-        wrapSizer->Add(tilePanel, 0, wxALL, 10);
+        gridSizer->Add(tilePanel, 0, wxALL, 10);
         tileMap[data.appId] = { bannerBmp, iconBmp, nullptr };
 
         wxString bannerPath = "images_banner/" + data.appId + ".jpg";
@@ -460,8 +453,8 @@ void MyFrame::ScanGames() {
         }
     }
 
-    mainVertSizer->Layout();
-    wxSize minSize = mainVertSizer->ComputeFittingClientSize(scrollWin);
+    gridSizer->Layout();
+    wxSize minSize = gridSizer->ComputeFittingClientSize(scrollWin);
     scrollWin->SetVirtualSize(minSize.x, minSize.y);
     scrollWin->FitInside();
 }

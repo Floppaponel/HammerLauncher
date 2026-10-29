@@ -1,9 +1,3 @@
-/*
- * Hammer Launcher
- * Copyright (c) 2026 Floppaponel
- * Licensed under the MIT License.
- */
-
 #pragma once
 #include <wx/wx.h>
 #include <wx/scrolwin.h>
@@ -15,6 +9,7 @@
 #include <wx/filename.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
+#include <wx/grid.h>
 #include <filesystem>
 #include <map>
 #include <vector>
@@ -49,14 +44,14 @@ private:
     wxSimplebook* book;
     wxPanel* mainPage;
     wxScrolledWindow* scrollWin;
+    wxGridSizer* gridSizer;
     wxPanel* profilePanel;
 
     wxStaticBitmap* avatarBmp;
     wxStaticText* profileName;
     wxStaticText* profileId;
 
-    wxButton* btnWebsite;
-    wxButton* btnGithub;
+    wxButton* btnDiscord;
     wxButton* btnOpenSource;
 
     wxPanel* gamePage;
